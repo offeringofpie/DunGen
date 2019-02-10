@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "target": "es5",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "lib": [ "es6", "dom" ],
+    "jsxFactory": "h",
+    "baseUrl": ".",
+    "paths": {
+      "js/*": ["src/js/classes/*"],
+      "css/*": ["src/css/*"],
+      "img/*": ["src/img/*"],
+      "services/*": ["src/js/services/*"]
+    },
+    "typeRoots": [
+      "src/typings",
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "src/**/*",
+  ]
+}
