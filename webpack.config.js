@@ -38,7 +38,7 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.ts','.js', '.json', '.css'],
       alias: {
-        js: path.resolve(__dirname, 'src/js/classes'),
+        js: path.resolve(__dirname, 'src/js'),
         css: path.resolve(__dirname, 'src/css'),
         img: path.resolve(__dirname, 'src/img'),
         services: path.resolve(__dirname, 'src/js/services')
@@ -105,15 +105,13 @@ module.exports = (env, argv) => {
         })
       ],
 			splitChunks: {
-        chunks: 'initial',
+        chunks: 'all',
 				automaticNameDelimiter: '/',
 				cacheGroups: {
           default: false,
 					dist: {
-            minChunks: 2,
-            reuseExistingChunk: true,
 						test: /[\\/]node_modules[\\/]/,
-            priority: 10,
+            priority: -10,
             enforce: true
 					}
 				}

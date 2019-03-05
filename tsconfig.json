@@ -13,7 +13,7 @@
     "jsxFactory": "h",
     "baseUrl": ".",
     "paths": {
-      "js/*": ["src/js/classes/*"],
+      "js/*": ["src/js/*"],
       "css/*": ["src/css/*"],
       "img/*": ["src/img/*"],
       "services/*": ["src/js/services/*"]
