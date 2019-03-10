@@ -1,7 +1,8 @@
 import store from 'services/globals';
 const sprite = {
+  'door': [16, 0],
   'wall': [80,0],
-  'floor': [160,96],
+  'floor': [160,96]
 };
 
 export default class Pattern {

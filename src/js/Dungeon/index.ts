@@ -20,6 +20,10 @@ export default class Dungeon {
     this.setRooms();
   }
 
+  restart() {
+    this.init();
+  }
+
   setRooms(rooms?, size?, roomTries?) {
     const roomSize = size || 40;
     let roomTriesLeft = roomTries || 100;
@@ -55,9 +59,9 @@ export default class Dungeon {
     }
 
     store.rooms.forEach((room, index) => {
-      for (let y = room.y; y < (room.y + room.h); y++) {
+      for (let y = room.y; y < (room.y + room.h - 1); y++) {
         let edgeY = (y == room.y) ? -1 : (y == (room.y + room.h -1)) ? 1 : 0;
-        for (let x = room.x; x < (room.x + room.w); x++) {
+        for (let x = room.x; x < (room.x + room.w - 1); x++) {
         let edgeX = (x == room.x) ? -1 : (x == (room.x + room.w -1)) ? 1 : 0;
           store.grid[y][x] = {
             type: 'floor',
@@ -76,6 +80,10 @@ export default class Dungeon {
 
   private _isFloor(y,x) {
     return store.grid[y][x].type === 'floor';
+  }
+
+  private _isDoor(y,x) {
+    return store.grid[y][x].type === 'door';
   }
 
   private _isEdge(y,x) {
@@ -98,6 +106,26 @@ export default class Dungeon {
           edge: [2,0]
         }
       }
+      
+      // if (y == r2.y-1) {
+      //   store.grid[y][c2.x] = {
+      //     type: 'door'
+      //   }
+      // } else if (y == r2.y+r2.h-1) {
+      //   store.grid[y][c2.x] = {
+      //     type: 'door'
+      //   }
+      // }
+      
+      // if (y == r1.y-1) {
+      //   store.grid[y][c1.x] = {
+      //     type: 'door'
+      //   }
+      // } else if (y == r1.y+r1.h-1) {
+      //   store.grid[y][c2.x] = {
+      //     type: 'door'
+      //   }
+      // }
     }
 
     for (let x = Math.min(c1.x, c2.x); x <= Math.max(c1.x, c2.x); x++) {
@@ -108,6 +136,26 @@ export default class Dungeon {
           edge: [0,2]
         }
       }
+
+      // if (x == r2.x-1) {
+      //   store.grid[c2.y][x] = {
+      //     type: 'door'
+      //   }
+      // } else if (x == r2.x+r2.w-1) {
+      //   store.grid[c2.y][x] = {
+      //     type: 'door'
+      //   }
+      // }
+      
+      // if (x == r1.x-1) {
+      //   store.grid[c1.y][x] = {
+      //     type: 'door'
+      //   }
+      // } else if (x == r1.x+r1.w-1) {
+      //   store.grid[c2.y][x] = {
+      //     type: 'door'
+      //   }
+      // }
     }
   }
 
@@ -122,7 +170,7 @@ export default class Dungeon {
           ];
 
           matrix.forEach(c => {
-            if (this._isValid(c[0],c[1]) && !this._isFloor(c[0],c[1])) {
+            if (this._isValid(c[0],c[1]) && !this._isFloor(c[0],c[1]) && !this._isDoor(c[0],c[1])) {
               store.grid[c[0]][c[1]] = {
                 type: 'wall'
               };
@@ -137,18 +185,11 @@ export default class Dungeon {
     let colors = ['#660000', '#000066'];
     for(var y = 0; y < store.gridSize; ++y) {
       for(var x = 0; x < store.gridSize; ++x) {
-        let room = store.grid[y][x].room;
         let type = store.grid[y][x].type;
-        if(type == 'floor') {
-          this.ctx.fillStyle = this.pattern.get('floor');
-          // this.ctx.fillStyle = colors[store.grid[y][x].index];
-          this.ctx.fillRect(store.cellSize.w/2 * x, store.cellSize.h/2 * y, store.cellSize.w/2, store.cellSize.h/2);
-        } else if(type=='corridor') {
-          this.ctx.fillStyle = '#000000';
-          this.ctx.fillRect(store.cellSize.w/2 * x, store.cellSize.h/2 * y, store.cellSize.w/2, store.cellSize.h/2);
-        } else if (type=='wall') {
-          this.ctx.fillStyle = this.pattern.get('wall');
-          this.ctx.fillRect(store.cellSize.w/2 * x, store.cellSize.h/2 * y, store.cellSize.w/2, store.cellSize.h/2);
+        if (type) {
+          this.ctx.fillStyle = this.pattern.get(type);
+  
+          this.ctx.fillRect(store.cellSize.w * x, store.cellSize.h * y, store.cellSize.w, store.cellSize.h);
         }
       }
     }

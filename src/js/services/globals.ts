@@ -1,13 +1,15 @@
 class Store {
-  canvas: HTMLCanvasElement
-  ctx: CanvasRenderingContext2D
-  width: number
-  height: number
-  img: HTMLImageElement
-  gridSize: number
-  cellSize: { w: number; h: number; }
-  rooms: Array<any>
-  grid: Array<any>
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  camera: object;
+  width: number;
+  height: number;
+  img: HTMLImageElement;
+  gridSize: number;
+  cellSize: { w: number; h: number; };
+  rooms: Array<any>;
+  grid: Array<any>;
+  pos: any;
 
   constructor(){
     this.canvas = document.querySelector('canvas');
@@ -18,10 +20,17 @@ class Store {
     this.gridSize = 98;
     this.cellSize = {
       w: this.width/this.gridSize,
-      h: this.height/this.gridSize*16/9
+      h: this.height/this.gridSize
     };
     this.rooms = new Array();
     this.grid = new Array();
+    this.pos = {
+      x:0,
+      y:0,
+      scale:0,
+      mouseX:0,
+      mouseY:0,
+    };
   }
 
   resize(width = window.innerWidth, height = window.innerHeight) {
