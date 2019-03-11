@@ -53,8 +53,8 @@ export default class Camera {
     this.matrix = [0, 0, 0, 0, 0, 0];
     this.invMatrix = [0, 0, 0, 0, 0, 0];
     this.mouse = new Keybindings();
-    this.mouseX = 0;
-    this.mouseY = 0;
+    this.mouse.posX = 0;
+    this.mouse.posY = 0;
 
     this.mouse.bind(store.canvas);
   }
@@ -104,10 +104,10 @@ export default class Camera {
     this.invMatrix[1] = -this.matrix[1] / det;
     this.invMatrix[2] = -this.matrix[2] / det;
     this.invMatrix[3] = this.matrix[0] / det;
-    if (this.mouse !== undefined) {
-      if (this.mouse.oldX !== undefined && (this.mouse.buttonRaw & 1) === 1) {
-        var mdx = this.mouse.x - this.mouse.oldX;
-        var mdy = this.mouse.y - this.mouse.oldY;
+    if (store.pos !== undefined) {
+      if (store.pos.oldX !== undefined && (store.pos.buttonRaw & 1) === 1) {
+        var mdx = store.pos.x - store.pos.oldX;
+        var mdy = store.pos.y - store.pos.oldY;
 
         var mrx = mdx * this.invMatrix[0] + mdy * this.invMatrix[2];
         var mry = mdx * this.invMatrix[1] + mdy * this.invMatrix[3];
@@ -115,45 +115,38 @@ export default class Camera {
         this.y -= mry;
       }
 
-      if (this.mouse.w !== undefined && this.mouse.w !== 0) {
-        this.ox = this.mouse.x;
-        this.oy = this.mouse.y;
-        this.x = this.mouseX;
-        this.y = this.mouseY;
+      if (store.pos.w !== undefined && store.pos.w !== 0) {
+        this.ox = store.pos.x;
+        this.oy = store.pos.y;
+        this.x = store.pos.posX;
+        this.y = store.pos.posY;
 
-        if (this.mouse.w > 0) {
+        if (store.pos.w > 0) {
           this.scale *= 1.1;
-          this.mouse.w -= 20;
-          if (this.mouse.w < 0) {
-            this.mouse.w = 0;
+          store.pos.w -= 20;
+          if (store.pos.w < 0) {
+            store.pos.w = 0;
           }
         }
-        if (this.mouse.w < 0) {
+        if (store.pos.w < 0) {
           this.scale *= 1 / 1.1;
-          this.mouse.w += 20;
-          if (this.mouse.w > 0) {
-            this.mouse.w = 0;
+          store.pos.w += 20;
+          if (store.pos.w > 0) {
+            store.pos.w = 0;
           }
         }
       }
 
-      var screenX = this.mouse.x - this.cox;
-      var screenY = this.mouse.y - this.coy;
-      this.mouseX =
+      var screenX = store.pos.x - this.cox;
+      var screenY = store.pos.y - this.coy;
+      store.pos.posX =
         this.cx + (screenX * this.invMatrix[0] + screenY * this.invMatrix[2]);
-      this.mouseY =
+      store.pos.posY =
         this.cy + (screenX * this.invMatrix[1] + screenY * this.invMatrix[3]);
-      this.mouse.rx = this.mouseX;
-      this.mouse.ry = this.mouseY;
-      this.mouse.oldX = this.mouse.x;
-      this.mouse.oldY = this.mouse.y;
+      store.pos.rx = store.pos.posX;
+      store.pos.ry = store.pos.posY;
+      store.pos.oldX = store.pos.x;
+      store.pos.oldY = store.pos.y;
     }
-    store.pos = {
-      x:this.x,
-      y:this.y,
-      scale:this.scale,
-      mouseX:this.mouseX,
-      mouseY:this.mouseY,
-    };
   }
 }

@@ -1,3 +1,5 @@
+import ControlKit from 'js/ControlKit';
+import { Pos } from 'js/Dungeon/interfaces';
 class Store {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -9,7 +11,8 @@ class Store {
   cellSize: { w: number; h: number; };
   rooms: Array<any>;
   grid: Array<any>;
-  pos: any;
+  pos: Pos;
+  control: ControlKit;
 
   constructor(){
     this.canvas = document.querySelector('canvas');
@@ -19,17 +22,25 @@ class Store {
     this.img = new Image();
     this.gridSize = 98;
     this.cellSize = {
-      w: this.width/this.gridSize,
+      w: this.width/this.gridSize*9/16,
       h: this.height/this.gridSize
     };
     this.rooms = new Array();
     this.grid = new Array();
+    this.control = new ControlKit();
     this.pos = {
-      x:0,
-      y:0,
-      scale:0,
-      mouseX:0,
-      mouseY:0,
+      buttons: [1, 2, 4, 6, 5, 3],
+      x: 0,
+      y: 0,
+      w: 0,
+      alt: false,
+      shift: false,
+      ctrl: false,
+      buttonLastRaw: 0,
+      buttonRaw: 0,
+      over: false,
+      mouseX: 0,
+      mouseY: 0
     };
   }
 

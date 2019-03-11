@@ -5,7 +5,7 @@ export default class Animate {
   loop:any;
   update:Function;
 
-  constructor(framerate = 1000 / 120) {
+  constructor(framerate = 1000 / 240) {
     this.frame = 0;
     this.lastTime = 0;
     this.framerate = framerate;

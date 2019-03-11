@@ -21,6 +21,7 @@ export default class Game {
 
   init() {
     store.buildGrid();
+    store.control.init();
     this.dungeon = new Dungeon();
     this.animate.update = () => {
       store.ctx.clearRect(0,0,store.canvas.width,store.canvas.height);

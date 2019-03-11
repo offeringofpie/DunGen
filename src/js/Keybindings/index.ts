@@ -1,27 +1,6 @@
-export default class Keybindings {
-  x: Number;
-  y: Number;
-  w: Number;
-  alt: Boolean;
-  shift: Boolean;
-  ctrl: Boolean;
-  buttonLastRaw: any;
-  buttonRaw: any;
-  over: Boolean;
-  buttons: Array<any>;
+import store from "js/services/globals";
 
-  constructor() {
-    this.x = 0;
-    this.y = 0;
-    this.w = 0;
-    this.alt = false;
-    this.shift = false;
-    this.ctrl = false;
-    this.buttonLastRaw = 0;
-    this.buttonRaw = 0;
-    this.over = false;
-    this.buttons = [1, 2, 4, 6, 5, 3];
-  }
+export default class Keybindings {
 
   bind(ev) {
     ev.addEventListener("mousemove", this.mouse.bind(this));
@@ -30,43 +9,39 @@ export default class Keybindings {
     ev.addEventListener("mouseout", this.mouse.bind(this));
     ev.addEventListener("mouseover", this.mouse.bind(this));
     ev.addEventListener("mousewheel", this.mouse.bind(this));
-    ev.addEventListener("DOMMouseScroll", this.mouse.bind(this)); // fire fox
+    ev.addEventListener("DOMMouseScroll", this.mouse.bind(this)); // firefox
 
-    ev.addEventListener(
-      "contextmenu",
-      function(ev) {
-        ev.preventDefault();
-      },
-      false
-    );
+    ev.addEventListener("contextmenu",ev => ev.preventDefault(), false);
   }
 
   mouse(ev) {
-    this.x = ev.offsetX;
-    this.y = ev.offsetY;
-    if (this.x === undefined) {
-      this.x = ev.clientX;
-      this.y = ev.clientY;
+    store.pos.x = ev.offsetX;
+    store.pos.y = ev.offsetY;
+    if (store.pos.x === undefined) {
+      store.pos.x = ev.clientX;
+      store.pos.y = ev.clientY;
     }
-    this.alt = ev.altKey;
-    this.shift = ev.shiftKey;
-    this.ctrl = ev.ctrlKey;
+    store.pos.alt = ev.altKey;
+    store.pos.shift = ev.shiftKey;
+    store.pos.ctrl = ev.ctrlKey;
     if (ev.type === "mousedown") {
       ev.preventDefault();
-      this.buttonRaw |= this.buttons[ev.which - 1];
+      store.pos.buttonRaw |= store.pos.buttons[ev.which - 1];
     } else if (ev.type === "mouseup") {
-      this.buttonRaw &= this.buttons[ev.which + 2];
+      store.pos.buttonRaw &= store.pos.buttons[ev.which + 2];
     } else if (ev.type === "mouseout") {
-      this.buttonRaw = 0;
-      this.over = false;
+      store.pos.buttonRaw = 0;
+      store.pos.over = false;
     } else if (ev.type === "mouseover") {
-      this.over = true;
+      store.pos.over = true;
     } else if (ev.type === "mousewheel") {
       ev.preventDefault();
-      this.w = ev.wheelDelta;
+      store.pos.w = ev.wheelDelta;
     } else if (ev.type === "DOMMouseScroll") {
       // FF you pedantic doffus
-      this.w = -ev.detail;
+      store.pos.w = -ev.detail;
     }
+
+    store.control.kit.update();
   }
 }
