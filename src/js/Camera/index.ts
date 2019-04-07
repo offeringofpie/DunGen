@@ -7,19 +7,16 @@ export default class Camera {
   ox: number;
   oy: number;
   scale: number;
-  rotate: number;
   cx: number;
   cy: number;
   cox: number;
   coy: number;
   cscale: number;
-  crotate: number;
   dx: number;
   dy: number;
   dox: number;
   doy: number;
   dscale: number;
-  drotate: number;
   drag: number;
   accel: number;
   matrix: Array<any>;
@@ -35,22 +32,19 @@ export default class Camera {
     this.ox = 0;
     this.oy = 0;
     this.scale = 1;
-    this.rotate = 0;
     this.cx = 0;
     this.cy = 0;
     this.cox = 0;
     this.coy = 0;
     this.cscale = 1;
-    this.crotate = 0;
     this.dx = 0;
     this.dy = 0;
     this.dox = 0;
     this.doy = 0;
     this.dscale = 1;
-    this.drotate = 0;
     this.drag = 0.1;
     this.accel = 2;
-    this.matrix = [0, 0, 0, 0, 0, 0];
+    this.matrix = [1, 0, 0, 1, 0, 0];
     this.invMatrix = [0, 0, 0, 0, 0, 0];
     this.mouse = new Keybindings();
     this.mouse.posX = 0;
@@ -63,34 +57,32 @@ export default class Camera {
     var m = this.matrix;
     var i = 0;
     store.ctx.setTransform(m[i++], m[i++], m[i++], m[i++], m[i++], m[i++]);
-
   }
+
   setHome() {
     store.ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
+
   update() {
     this.dx += (this.x - this.cx) * this.accel;
     this.dy += (this.y - this.cy) * this.accel;
     this.dox += (this.ox - this.cox) * this.accel;
     this.doy += (this.oy - this.coy) * this.accel;
     this.dscale += (this.scale - this.cscale) * this.accel;
-    this.drotate += (this.rotate - this.crotate) * this.accel;
     this.dx *= this.drag;
     this.dy *= this.drag;
     this.dox *= this.drag;
     this.doy *= this.drag;
     this.dscale *= this.drag;
-    this.drotate *= this.drag;
 
     this.cx += this.dx;
     this.cy += this.dy;
     this.cox += this.dox;
     this.coy += this.doy;
     this.cscale += this.dscale;
-    this.crotate += this.drotate;
 
-    this.matrix[0] = Math.cos(this.crotate) * this.cscale;
-    this.matrix[1] = Math.sin(this.crotate) * this.cscale;
+    this.matrix[0] = 1;
+    this.matrix[1] = 0;
     this.matrix[2] = -this.matrix[1];
     this.matrix[3] = this.matrix[0];
 

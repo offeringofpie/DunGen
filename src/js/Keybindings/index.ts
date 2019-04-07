@@ -11,7 +11,7 @@ export default class Keybindings {
     ev.addEventListener("mousewheel", this.mouse.bind(this));
     ev.addEventListener("DOMMouseScroll", this.mouse.bind(this)); // firefox
 
-    ev.addEventListener("contextmenu",ev => ev.preventDefault(), false);
+    // ev.addEventListener("contextmenu",ev => ev.preventDefault(), false);
   }
 
   mouse(ev) {
